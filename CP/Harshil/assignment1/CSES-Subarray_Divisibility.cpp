@@ -3,35 +3,40 @@ using namespace std;
 
 int main()
 {
-    int n,x;
-    cin>>n>>x;
+    int n;
+    cin>>n;
     int a[n];
     for(int i=0;i<n;i++)
     {
-        cin>>a[i];
+        int temp;
+        cin>>temp;
+        a[i]=((temp%n)+n)%n;
     }
-    int count=0;
-    long long int current_sum=0;
-    int i=-1,j=-1;
-    while(j<n)
+    int prefix[n];  
+    for(int i=0;i<n;i++)
     {
-        if(current_sum%n==0)
+        if(i==0)
         {
-            count++;
-            j++;
-            current_sum+=a[j];
-        }
-        else if(current_sum<x)
-        {
-            j++;
-            current_sum+=a[j];
+            prefix[i]=a[i];
         }
         else
         {
-            i++;
-            current_sum-=a[i];
+            prefix[i]=(prefix[i-1]+a[i])%n;
         }
-        // cout<<i<<" "<<j<<endl;
+    }
+    map<int,int> m;
+    for(int i=0;i<n;i++)
+    {
+        m[prefix[i]]++;
+    }
+    int count=0;
+    for(auto i:m)
+    {
+        // if(i.first==0)
+        // {
+        //     count+=i.second;
+        // }
+        count+=((i.second)*(i.second-1))/2;
     }
     cout<<count<<endl;
 }
