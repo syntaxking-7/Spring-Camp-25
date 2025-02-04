@@ -21,22 +21,29 @@ int main() {
         string s1,s2;
         cin>>s1>>s2;
         int a = s1.size(), b= s2.size();
-        vector<vector<int> > dp(a+1,vector<int> (b+1,0));
-        for(int i = 0; i<=b; i++){
-            dp[0][i] = i;
-        }
-        for(int j = 0; j<=a; j++){
-            dp[j][0] = j;
-        }
+        vector<vi > dp(a+1,vi(b+1,0));
         for(int i = 1; i<=a; i++){
             for(int j = 1; j<=b; j++){
-                int a = dp[i-1][j-1] +1;
-                if(s1[i-1]==s2[j-1]) a -= 1;
-                dp[i][j] = min(dp[i-1][j]+1, min(dp[i][j-1]+1,a));
+                if(s1[i-1]==s2[j-1]){
+                    dp[i][j] = dp[i-1][j-1] + 1;
+                }
+                else dp[i][j] = max(dp[i-1][j],dp[i][j-1]);
             }
         }
-        cout<<dp[a][b]<<endl;
+        string ans = "";
+        int i = a, j = b;
+        while(i>0 && j>0){
+            if(s1[i-1]==s2[j-1]){
+                ans = s1[i-1] + ans;
+                i--;
+                j--;
+            }
+            else if(dp[i-1][j]>=dp[i][j-1]) i--;
+            else j--;
+        }
+        cout<<ans<<endl;
     }
 
     return 0;
 }
+
